@@ -120,10 +120,10 @@
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="/editoras">Editoras</a>
+          <a class="nav-link" href="/views/editoras">Editoras</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/editoras">Acervo</a>
+          <a class="nav-link" href="/views/acervos">Acervo</a>
         </li>
       </ul>
     </div>

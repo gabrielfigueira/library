@@ -1,12 +1,12 @@
-<?php  require_once '../config/database.php'; ?>
+<?php  require_once(__DIR__.'/../config/database.php'); ?>
 
 <?php
 
-function findUserDb($conn, $id) {
-    $id = mysqli_real_escape_string($conn, $id);
-	$user;
+function find($conn, $id) {
+	$id = mysqli_real_escape_string($conn, $id);
+	$acervo;
 
-	$sql = "SELECT * FROM users  WHERE id = ?";
+	$sql = "SELECT * FROM acervos  WHERE id = ?";
 	$stmt = mysqli_stmt_init($conn);
 
 	if(!mysqli_stmt_prepare($stmt, $sql))
@@ -15,66 +15,67 @@ function findUserDb($conn, $id) {
 	mysqli_stmt_bind_param($stmt, 'i', $id);
 	mysqli_stmt_execute($stmt);
 	
-	$user = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+	$acervo = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
 
 	mysqli_close($conn);
-	return $user;
+	return $acervo;
 }
 
-function createUserDb($conn, $name, $email, $phone) {
-	$name = mysqli_real_escape_string($conn, $name);
-	$email = mysqli_real_escape_string($conn,  $email);
-	$phone = mysqli_real_escape_string($conn,  $phone);
-
-	if($name && $email && $phone) {
-		$sql = "INSERT INTO users (name, email, phone) VALUES (?, ?, ?)";
+function create($conn, $editora_id, $autor, $ano, $quantidade, $descricao) {
+	$editora_id = mysqli_real_escape_string($conn, $editora_id);
+	$autor = mysqli_real_escape_string($conn, $autor);
+	$ano = mysqli_real_escape_string($conn, $ano);
+	$quantidade = mysqli_real_escape_string($conn, $quantidade);
+	$descricao = mysqli_real_escape_string($conn, $descricao);
+	if($editora_id && $autor && $ano && $quantidade && $descricao) {
+		$sql = "INSERT INTO acervos (editora_id, autor, ano, quantidade, descricao) VALUES (?, ?, ?, ?, ?)";
 		$stmt = mysqli_stmt_init($conn);
 
 		if(!mysqli_stmt_prepare($stmt, $sql)) 
 			exit('SQL error');
 		
-		mysqli_stmt_bind_param($stmt, 'sss', $name, $email, $phone);
+		mysqli_stmt_bind_param($stmt, 'isiis', $editora_id, $autor, $ano, $quantidade, $descricao);
 		mysqli_stmt_execute($stmt);
 		mysqli_close($conn);
 		return true;
 	}
 }
 
-function readUserDb($conn) {
-    $users = [];
+function listAcervos($conn) {
+	$acervos = [];
 
-	$sql = "SELECT * FROM users";
+	$sql = "SELECT * FROM acervos";
 	$result = mysqli_query($conn, $sql);
 
 	$result_check = mysqli_num_rows($result);
 	
 	if($result_check > 0)
-		$users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+		$acervos = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 	mysqli_close($conn);
-	return $users;
+	return $acervos;
 }
 
-function updateUserDb($conn, $id, $name, $email, $phone) {
-    if($id && $name && $email && $phone) {
-		$sql = "UPDATE users SET name = ?, email = ?, phone = ? WHERE id = ?";
+function update($conn, $id, $editora_id, $autor, $ano, $quantidade, $descricao) {
+	if($id && $editora_id && $autor && $ano && $quantidade && $descricao) {
+		$sql = "UPDATE acervos SET editora_id = ?, autor = ?, ano = ?, quantidade = ? , descricao = ? WHERE id = ?";
 		$stmt = mysqli_stmt_init($conn);
 
 		if(!mysqli_stmt_prepare($stmt, $sql))
 			exit('SQL error');
 
-		mysqli_stmt_bind_param($stmt, 'sssi', $name, $email, $phone, $id);
+		mysqli_stmt_bind_param($stmt, 'iisiis', $id, $editora_id, $autor, $ano, $quantidade, $descricao);
 		mysqli_stmt_execute($stmt);
 		mysqli_close($conn);
 		return true;
 	}
 }
 
-function deleteUserDb($conn, $id) {
+function delete($conn, $id) {
     $id = mysqli_real_escape_string($conn, $id);
 
 	if($id) {
-		$sql = "DELETE FROM users WHERE id = ?";
+		$sql = "DELETE FROM acervos WHERE id = ?";
 		$stmt = mysqli_stmt_init($conn);
 
 		if(!mysqli_stmt_prepare($stmt, $sql))

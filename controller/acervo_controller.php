@@ -1,29 +1,29 @@
 <?php
 
-require_once '../model/editora.php'; 
+require_once(__DIR__.'/../model/acervo.php');
 
-function findUserAction($conn, $id) {
-	return findUserDb($conn, $id);
+function findAcervo($conn, $id) {
+	return find($conn, $id);
 }
 
-function readUserAction($conn) {
-	return readUserDb($conn);
+function AllAcervos($conn) {
+	return listAcervos($conn);
 }
 
-function create($conn, $nome) {
-	$editora = createUserDb($conn, $nome);
-	$message = $editora == 1 ? 'success-create' : 'error-create';
+function createAcervo($conn, $editora_id, $autor, $ano, $quantidade, $descricao) {
+	$acervo = create($conn, $editora_id, $autor, $ano, $quantidade, $descricao);
+	$message = $acervo == 1 ? 'success-create' : 'error-create';
+	return header("Location: http://localhost:3003/views/acervos?message=$message");
+}
+
+function updateAcervo($conn, $id, $editora_id, $autor, $ano, $quantidade, $descricao) {
+	$updateAcervo = update($conn, $id, $editora_id, $autor, $ano, $quantidade, $descricao);
+	$message = $updateAcervo == 1 ? 'success-update' : 'error-update';
 	return header("Location: ./read.php?message=$message");
 }
 
-function updateUserAction($conn, $id, $name, $email, $phone) {
-	$updateUserDb = updateUserDb($conn, $id, $name, $email, $phone);
-	$message = $updateUserDb == 1 ? 'success-update' : 'error-update';
-	return header("Location: ./read.php?message=$message");
-}
-
-function deleteUserAction($conn, $id) {
-	$deleteUserDb = deleteUserDb($conn, $id);
-	$message = $deleteUserDb == 1 ? 'success-remove' : 'error-remove';
+function deleteAcervo($conn, $id) {
+	$deleteAcervo = delete($conn, $id);
+	$message = $deleteAcervo == 1 ? 'success-remove' : 'error-remove';
 	return header("Location: ./read.php?message=$message");
 }
